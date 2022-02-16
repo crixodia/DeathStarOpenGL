@@ -19,53 +19,52 @@
     <Filter Include="Source Files\textures">
       <UniqueIdentifier>{7f5077cc-038f-44ba-8306-383f0b1eaf27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\textures\skybox">
+      <UniqueIdentifier>{9d3ea22e-3e59-49da-8399-eebe5a761be4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="DeathStar.cpp">
+    <ClCompile Include="space.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\chest.png">
-      <Filter>Source Files\textures</Filter>
+    <None Include="shaders\cubemaps.fs">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\cubemaps.vs">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\skybox.fs">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\skybox.vs">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="textures\skybox\back.jpg">
+      <Filter>Source Files\textures\skybox</Filter>
     </Image>
-    <Image Include="textures\crafting_table.png">
-      <Filter>Source Files\textures</Filter>
+    <Image Include="textures\skybox\bottom.jpg">
+      <Filter>Source Files\textures\skybox</Filter>
     </Image>
-    <Image Include="textures\dark_wood.png">
-      <Filter>Source Files\textures</Filter>
+    <Image Include="textures\skybox\front.jpg">
+      <Filter>Source Files\textures\skybox</Filter>
     </Image>
-    <Image Include="textures\emerald.png">
-      <Filter>Source Files\textures</Filter>
+    <Image Include="textures\skybox\left.jpg">
+      <Filter>Source Files\textures\skybox</Filter>
     </Image>
-    <Image Include="textures\furnace.png">
-      <Filter>Source Files\textures</Filter>
+    <Image Include="textures\skybox\right.jpg">
+      <Filter>Source Files\textures\skybox</Filter>
     </Image>
-    <Image Include="textures\gold.png">
-      <Filter>Source Files\textures</Filter>
+    <Image Include="textures\skybox\top.jpg">
+      <Filter>Source Files\textures\skybox</Filter>
     </Image>
-    <Image Include="textures\gray_wool.png">
-      <Filter>Source Files\textures</Filter>
-    </Image>
-    <Image Include="textures\hay_bale.png">
-      <Filter>Source Files\textures</Filter>
-    </Image>
-    <Image Include="textures\nether.png">
-      <Filter>Source Files\textures</Filter>
-    </Image>
-    <Image Include="textures\tnt.png">
-      <Filter>Source Files\textures</Filter>
-    </Image>
-    <Image Include="textures\white_wood.png">
-      <Filter>Source Files\textures</Filter>
-    </Image>
-    <Image Include="textures\white_wool.png">
-      <Filter>Source Files\textures</Filter>
-    </Image>
-    <Image Include="textures\wood.png">
+    <Image Include="textures\container.jpg">
       <Filter>Source Files\textures</Filter>
     </Image>
   </ItemGroup>
