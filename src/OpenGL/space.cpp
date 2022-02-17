@@ -27,14 +27,15 @@ void processInput(GLFWwindow* window);
 unsigned int loadTexture(const char* path);
 unsigned int loadCubemap(const char* faces[]);
 
-// settings
+// Settings
 const unsigned int SCR_WIDTH = 800;
 const unsigned int SCR_HEIGHT = 800;
 
-// camera
+// Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 float lastX = (float)SCR_WIDTH / 2.0;
 float lastY = (float)SCR_HEIGHT / 2.0;
+int cameraSpeed = 1;
 bool firstMouse = true;
 
 // timing
@@ -133,8 +134,8 @@ int main() {
 		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
 	};
 
-	float skyboxVertices[] = {
-		// positions          
+	// SkyBox Vertices
+	float skyboxVertices[] = {         
 		-1.0f,  1.0f, -1.0f,
 		-1.0f, -1.0f, -1.0f,
 		 1.0f, -1.0f, -1.0f,
@@ -178,7 +179,7 @@ int main() {
 		 1.0f, -1.0f,  1.0f
 	};
 
-	// cube VAO
+	// Cube VAO
 	unsigned int cubeVAO, cubeVBO;
 	glGenVertexArrays(1, &cubeVAO);
 	glGenBuffers(1, &cubeVBO);
@@ -189,7 +190,8 @@ int main() {
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
-	// skybox VAO
+
+	// SkyBox VAO
 	unsigned int skyboxVAO, skyboxVBO;
 	glGenVertexArrays(1, &skyboxVAO);
 	glGenBuffers(1, &skyboxVBO);
@@ -199,12 +201,12 @@ int main() {
 	glEnableVertexAttribArray(0);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
 
-	// load textures
-	// -------------
+	
+	// Load textures
 	unsigned int cubeTexture = loadTexture("textures/container.jpg");
 	std::cout << "Textures loaded" << std::endl;
 
-	// SkyBox faces
+	// SkyeBox cube faces
 	const char* faces[6]{
 		"textures/skybox/right.jpg",
 		"textures/skybox/left.jpg",
@@ -214,19 +216,18 @@ int main() {
 		"textures/skybox/back.jpg"
 	};
 
+	// Load cubemap textures
 	unsigned int cubemapTexture = loadCubemap(faces);
 	std::cout << "Cubemap textures loaded" << std::endl;
 
-	// shader configuration
-	// --------------------
+	// Shader configuration
 	shader.use();
 	shader.setInt("texture1", 0);
 
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
 
-	// render loop
-	// -----------
+	// Render Loop
 	while (!glfwWindowShouldClose(window)) {
 		// per-frame time logic
 		// --------------------
@@ -291,20 +292,28 @@ int main() {
 	return 0;
 }
 
-// process all input: query GLFW whether relevant keys are pressed/released this frame and react accordingly
-// ---------------------------------------------------------------------------------------------------------
+
+/**
+* Process all input
+*
+* Query GLFW whether relevant keys are pressed/released this frame and react accordingly.
+*/
 void processInput(GLFWwindow* window) {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
 	if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
-		camera.ProcessKeyboard(FORWARD, deltaTime);
+		camera.ProcessKeyboard(FORWARD, cameraSpeed * deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
-		camera.ProcessKeyboard(BACKWARD, deltaTime);
+		camera.ProcessKeyboard(BACKWARD, cameraSpeed * deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
-		camera.ProcessKeyboard(LEFT, deltaTime);
+		camera.ProcessKeyboard(LEFT, cameraSpeed * deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
-		camera.ProcessKeyboard(RIGHT, deltaTime);
+		camera.ProcessKeyboard(RIGHT, cameraSpeed * deltaTime);
+
+	// Use LEFT CTRL to move fast
+	cameraSpeed = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ? 3 : 1;
 }
+
 
 // glfw: whenever the window size changed (by OS or user resize) this callback function executes
 // ---------------------------------------------------------------------------------------------
@@ -314,8 +323,12 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	glViewport(0, 0, width, height);
 }
 
-// glfw: whenever the mouse moves, this callback is called
-// -------------------------------------------------------
+
+/**
+* Mouse move callback
+*
+* Whenever the mouse move, this callback is called.
+*/
 void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 	float xpos = static_cast<float>(xposIn);
 	float ypos = static_cast<float>(yposIn);
@@ -334,11 +347,16 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
+
+/**
+* Mouse scroll callback
+*
+* Whenever the mouse scroll wheel scrolls, this callback is called.
+*/
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 	camera.ProcessMouseScroll(static_cast<float>(yoffset));
 }
+
 
 /**
 * Loads a texture
