@@ -90,8 +90,12 @@ int main() {
 	Shader ourShader("shaders/shader_exercise16_mloading.vs", "shaders/shader_exercise16_mloading.fs");
 
 
-	Model ourModel("model/mars/scene.gltf");
+	Model mars("model/mars/scene.gltf");
 	Model ring("model/haloring/scene.gltf");
+	Model charon("model/charon/scene.gltf");
+	Model pelican("model/pelican/scene.gltf");
+	Model phantom("model/phantom/scene.gltf");
+	Model precursors("model/precursors/scene.gltf");
 
 
 	// SkyBox Vertices
@@ -203,25 +207,57 @@ int main() {
 		shader.setMat4("projection", projection);
 
 
-		// Ring
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-30.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
-		model = glm::rotate(model, currentFrame / 100, glm::vec3(0.0f, 1.0f, 0.0f));
-		ourShader.setMat4("model", model);
-		ourModel.Draw(ourShader);
-
-
 		// Mars
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.0f, 0.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-12.0f, 9.5f, -9.0f));
+		model = glm::scale(model, glm::vec3(11.0f, 11.0f, 11.0f));
+		model = glm::rotate(model, currentFrame / 500, glm::vec3(0.0f, 1.0f, 0.0f));
+		ourShader.setMat4("model", model);
+		mars.Draw(ourShader);
+
+
+		// Ring
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(0.2f, 9.5f, -7.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
-		model = glm::rotate(model, 0.05f, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, -0.05f, glm::vec3(0.0f, 1.0f, 0.0f));
-		model = glm::rotate(model, currentFrame/100, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, -0.2f, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, 0.08f, glm::vec3(0.0f, 0.0f, 1.0f));
+		model = glm::rotate(model, currentFrame/200, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		ring.Draw(ourShader);
 
+
+		// Charon
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(2.0f, 9.5f, -7.0f));
+		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		ourShader.setMat4("model", model);
+		charon.Draw(ourShader);
+
+
+
+		// Pelican
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(6.0f, 9.5f, -7.0f));
+		model = glm::scale(model, glm::vec3(0.0001f, 0.0001f, 0.0001f));
+		ourShader.setMat4("model", model);
+		pelican.Draw(ourShader);
+
+
+		// Phantom
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(7.0f, 9.5f, -7.0f));
+		model = glm::scale(model, glm::vec3(0.0005f, 0.0005f, 0.0005f));
+		ourShader.setMat4("model", model);
+		phantom.Draw(ourShader);
+
+
+		// Precursors
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(10.0f, 9.5f, -7.0f));
+		model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+		ourShader.setMat4("model", model);
+		precursors.Draw(ourShader);
 
 		// draw skybox as last
 		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
@@ -274,7 +310,7 @@ void processInput(GLFWwindow* window) {
 		camera.ProcessKeyboard(RIGHT, cameraSpeed * deltaTime);
 
 	// Use LEFT CTRL to move fast
-	cameraSpeed = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ? 3 : 1;
+	cameraSpeed = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ? 4 : 1;
 }
 
 

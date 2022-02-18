@@ -1,0 +1,11 @@
+Model Information:
+* title:	Covenant Spirit Dropship (Precursor's legacy)
+* source:	https://sketchfab.com/3d-models/covenant-spirit-dropship-precursors-legacy-ee3d36b139b1458c9b800ffa0e85f64c
+* author:	Shadow_hawk (https://sketchfab.com/juancoc84)
+
+Model License:
+* license type:	CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
+* requirements:	Author must be credited. No commercial use.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Covenant Spirit Dropship (Precursor's legacy)" (https://sketchfab.com/3d-models/covenant-spirit-dropship-precursors-legacy-ee3d36b139b1458c9b800ffa0e85f64c) by Shadow_hawk (https://sketchfab.com/juancoc84) licensed under CC-BY-NC-4.0 (http://creativecommons.org/licenses/by-nc/4.0/)
