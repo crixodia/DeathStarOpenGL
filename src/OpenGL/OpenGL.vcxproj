@@ -151,6 +151,8 @@
   <ItemGroup>
     <None Include="shaders\cubemaps.fs" />
     <None Include="shaders\cubemaps.vs" />
+    <None Include="shaders\shader_exercise16_mloading.fs" />
+    <None Include="shaders\shader_exercise16_mloading.vs" />
     <None Include="shaders\skybox.fs" />
     <None Include="shaders\skybox.vs" />
   </ItemGroup>

@@ -44,6 +44,12 @@
     <None Include="shaders\skybox.vs">
       <Filter>Source Files\shaders</Filter>
     </None>
+    <None Include="shaders\shader_exercise16_mloading.fs">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\shader_exercise16_mloading.vs">
+      <Filter>Source Files\shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="textures\skybox\back.jpg">
