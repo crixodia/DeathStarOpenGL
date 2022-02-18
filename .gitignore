@@ -17,11 +17,10 @@
 mono_crash.*
 
 # Build results
-[Dd]ebug/
+
 [Dd]ebugPublic/
 [Rr]elease/
 [Rr]eleases/
-x64/
 x86/
 [Aa][Rr][Mm]/
 [Aa][Rr][Mm]64/
@@ -30,6 +29,12 @@ bld/
 [Oo]bj/
 [Ll]og/
 [Ll]ogs/
+
+# CUSTOM IGNORE
+src/OpenGL/x64/[Dd]ebug/
+src/x64/Debug/model
+src/x64/Debug/shaders
+src/x64/Debug/textures
 
 # Visual Studio 2015/2017 cache/options directory
 .vs/

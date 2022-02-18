@@ -16,10 +16,13 @@
 #include <learnopengl/camera.h>
 #include <learnopengl/model.h>
 
+#include <math.h>
+
 //#define STB_IMAGE_IMPLEMENTATION 
 //#include <learnopengl/stb_image.h>
 
 #include <iostream>
+const float PI = 3.14159265359f;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -211,7 +214,7 @@ int main() {
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-12.0f, 9.5f, -9.0f));
 		model = glm::scale(model, glm::vec3(11.0f, 11.0f, 11.0f));
-		model = glm::rotate(model, currentFrame / 500, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::rotate(model, currentFrame / 100, glm::vec3(0.0f, 1.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		mars.Draw(ourShader);
 
@@ -222,27 +225,36 @@ int main() {
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		model = glm::rotate(model, -0.2f, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, 0.08f, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, currentFrame/200, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, currentFrame / 100, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		ring.Draw(ourShader);
 
 
 		// Charon
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(2.0f, 9.5f, -7.0f));
-		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
+		glm::vec3 init = glm::vec3(15.0f, 9.5f, -10.0f);
+		float factor = currentFrame / 10.0f;
+		model = glm::translate(model, init + glm::vec3(cos(factor) - pow(cos(factor), 3.0f), sin(factor) - pow(sin(factor), 3.0f), sin(factor)));
+		model = glm::scale(model, glm::vec3(-0.5f, 0.5f, 0.5f));
+		model = glm::rotate(model, -PI / 2, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		charon.Draw(ourShader);
 
 
 
 		// Pelican
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(6.0f, 9.5f, -7.0f));
-		model = glm::scale(model, glm::vec3(0.0001f, 0.0001f, 0.0001f));
-		ourShader.setMat4("model", model);
-		pelican.Draw(ourShader);
+		int a = 1, b = 2;
 
+		for (int i = 0; i < 50; i++) {
+			model = glm::mat4(1.0f);
+			init = glm::vec3(15.0f, i*7.0f, -10.0f);
+			factor = currentFrame / 10.0f;
+			model = glm::translate(model, init + glm::vec3(cos(a * factor) - pow(cos(b * factor), 3.0f), sin(a * factor) - pow(sin(b * factor), 3.0f), sin(factor) - PI / 2));
+			model = glm::scale(model, glm::vec3(0.0001f, 0.0001f, 0.0001f));
+			model = glm::rotate(model, -PI / 2, glm::vec3(0.0f, 1.0f, 0.0f));
+			ourShader.setMat4("model", model);
+			pelican.Draw(ourShader);
+		}
 
 		// Phantom
 		model = glm::mat4(1.0f);
@@ -254,8 +266,11 @@ int main() {
 
 		// Precursors
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(10.0f, 9.5f, -7.0f));
-		model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+		init = glm::vec3(2.0f, 9.5f, -10.0f);
+		factor = currentFrame / 10.0f;
+		model = glm::translate(model, init + glm::vec3(cos(a * factor) - pow(cos(b * factor), 3.0f), sin(a * factor) - pow(sin(b * factor), 3.0f), sin(factor) - PI / 2));
+		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		model = glm::rotate(model, -PI / 2, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		precursors.Draw(ourShader);
 
@@ -290,7 +305,6 @@ int main() {
 	glfwTerminate();
 	return 0;
 }
-
 
 /**
 * Process all input
