@@ -81,5 +81,17 @@
     <Text Include="data\skybox.txt">
       <Filter>Source Files\data</Filter>
     </Text>
+    <Text Include="data\zmove.txt">
+      <Filter>Source Files\data</Filter>
+    </Text>
+    <Text Include="data\ymove.txt">
+      <Filter>Source Files\data</Filter>
+    </Text>
+    <Text Include="data\xmove.txt">
+      <Filter>Source Files\data</Filter>
+    </Text>
+    <Text Include="data\abjk.txt">
+      <Filter>Source Files\data</Filter>
+    </Text>
   </ItemGroup>
 </Project>

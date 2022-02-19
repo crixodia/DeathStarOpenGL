@@ -21,8 +21,8 @@
 #include <fstream>
 
 
-//#define STB_IMAGE_IMPLEMENTATION 
-//#include <learnopengl/stb_image.h>
+// #define STB_IMAGE_IMPLEMENTATION 
+// #include <learnopengl/stb_image.h>
 
 const float PI = 3.14159265359f;
 
@@ -46,7 +46,7 @@ float lastY = (float)SCR_HEIGHT / 2.0;
 int cameraSpeed = 1;
 bool firstMouse = true;
 
-// timing
+// Timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
@@ -56,7 +56,6 @@ glm::vec3 shipMovement(float a, float b, float j, float k, glm::vec3 init, float
 
 int main() {
 	// glfw: initialize and configure
-	// ------------------------------
 	glfwInit();
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -67,7 +66,6 @@ int main() {
 #endif
 
 	// glfw window creation
-	// --------------------
 	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Space", NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Failed to create GLFW window" << std::endl;
@@ -80,27 +78,24 @@ int main() {
 	glfwSetCursorPosCallback(window, mouse_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 
-	// tell GLFW to capture our mouse
+	// Tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
 	// glad: load all OpenGL function pointers
-	// ---------------------------------------
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
 		std::cout << "Failed to initialize GLAD" << std::endl;
 		return -1;
 	}
 
-	// configure global opengl state
-	// -----------------------------
+	// Configure global opengl state
 	glEnable(GL_DEPTH_TEST);
 
-	// build and compile shaders
-	// -------------------------
+	// Build and compile shaders
 	Shader shader("shaders/cubemaps.vs", "shaders/cubemaps.fs");
 	Shader skyboxShader("shaders/skybox.vs", "shaders/skybox.fs");
 	Shader ourShader("shaders/shader_exercise16_mloading.vs", "shaders/shader_exercise16_mloading.fs");
 
-
+	// Load 3D Models
 	Model mars("model/mars/scene.gltf");
 	Model ring("model/haloring/scene.gltf");
 	Model charon("model/charon/scene.gltf");
@@ -108,6 +103,12 @@ int main() {
 	Model phantom("model/phantom/scene.gltf");
 	Model precursors("model/precursors/scene.gltf");
 
+	// Preloaded instace positions for ships
+	float xmove[50], ymove[50], zmove[50], abjk[200];
+	loadNumbers("data/xmove.txt", xmove);
+	loadNumbers("data/ymove.txt", ymove);
+	loadNumbers("data/zmove.txt", zmove);
+	loadNumbers("data/abjk.txt", abjk);
 
 	// SkyBox Vertices
 	float skyboxVertices[108];
@@ -125,8 +126,8 @@ int main() {
 
 
 	// Load textures
-	//unsigned int cubeTexture = loadTexture("textures/container.jpg");
-	//std::cout << "Textures loaded" << std::endl;
+	// unsigned int cubeTexture = loadTexture("textures/container.jpg");
+	// std::cout << "Textures loaded" << std::endl;
 
 	// SkyBox cube faces
 	const char* faces[6]{
@@ -150,22 +151,19 @@ int main() {
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window)) {
-		// per-frame time logic
-		// --------------------
+		// Frame
 		float currentFrame = static_cast<float>(glfwGetTime());
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
 
-		// input
-		// -----
+		// Input
 		processInput(window);
 
-		// render
-		// ------
+		// Render
 		glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-		// draw scene as normal
+		// Camera Scene
 		ourShader.use();
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = camera.GetViewMatrix();
@@ -174,7 +172,6 @@ int main() {
 		shader.setMat4("view", view);
 		shader.setMat4("projection", projection);
 
-
 		// Mars
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-12.0f, 9.5f, -9.0f));
@@ -182,7 +179,6 @@ int main() {
 		model = glm::rotate(model, currentFrame / 100, glm::vec3(0.0f, 1.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		mars.Draw(ourShader);
-
 
 		// Ring
 		model = glm::mat4(1.0f);
@@ -194,36 +190,54 @@ int main() {
 		ourShader.setMat4("model", model);
 		ring.Draw(ourShader);
 
-
 		// Charon
 		model = glm::mat4(1.0f);
-		glm::vec3 init = glm::vec3(15.0f, 9.5f, -10.0f);
+		glm::vec3 init = glm::vec3(15.0f, 9.5f, -7.5f);
 		float t = currentFrame / 10.0f;
-		model = glm::translate(model, shipMovement(1, 2, 3, 3, init, currentFrame / 10.0f, 0.0f));
+		model = glm::translate(model, shipMovement(1, 2, 2, 1, init, currentFrame / 50.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(-0.5f, 0.5f, 0.5f));
 		model = glm::rotate(model, -PI / 2, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		charon.Draw(ourShader);
 
-
-
-		// Pelican
 		for (int i = 0; i < 50; i++) {
+			// Pelican
 			model = glm::mat4(1.0f);
-			init = glm::vec3(15.0f, i * 7.0f, -10.0f);
-			model = glm::translate(model, shipMovement(1, 2, 3, 3, init, currentFrame / 10.0f, -PI / 2));
+			init = glm::vec3(15.0f - xmove[i], 9.5f - ymove[i], -6.5f - zmove[i]);
+			model = glm::translate(
+				model,
+				shipMovement(
+					abjk[i],
+					abjk[50 + i],
+					abjk[100 + i],
+					abjk[150 + i],
+					init,
+					currentFrame / 100.0f,
+					-PI / 2
+				)
+			);
 			model = glm::scale(model, glm::vec3(0.0001f, 0.0001f, 0.0001f));
 			model = glm::rotate(model, -PI / 2, glm::vec3(0.0f, 1.0f, 0.0f));
 			ourShader.setMat4("model", model);
 			pelican.Draw(ourShader);
-		}
 
-		// Phantom
-		for (int i = 0; i < 50; i++) {
+			// Phantom
 			model = glm::mat4(1.0f);
-			init = glm::vec3(7.0f, 9.5f, -7.0f);
-			model = glm::translate(model, shipMovement(1, 2, 3, 3, init, currentFrame / 10.0f, 0.0f));
+			init = glm::vec3(2.0f + xmove[i], 9.5f - ymove[i], -5.5f - zmove[i]);
+			model = glm::translate(
+				model,
+				shipMovement(
+					abjk[i],
+					abjk[50 + i],
+					abjk[100 + i],
+					abjk[150 + i],
+					init,
+					currentFrame / 100.0f,
+					0.0f
+				)
+			);
 			model = glm::scale(model, glm::vec3(0.0005f, 0.0005f, 0.0005f));
+			model = glm::rotate(model, PI / 2, glm::vec3(0.0f, 1.0f, 0.0f));
 			ourShader.setMat4("model", model);
 			phantom.Draw(ourShader);
 		}
@@ -232,37 +246,38 @@ int main() {
 		model = glm::mat4(1.0f);
 		init = glm::vec3(2.0f, 9.5f, -10.0f);
 		t = currentFrame / 10.0f;
-		model = glm::translate(model, shipMovement(1, 2, 3, 3, init, currentFrame / 10.0f, -PI / 2));
+		model = glm::translate(model, shipMovement(2, 1, 2, 1, init, currentFrame / 50.0f, -PI / 2));
 		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
 		model = glm::rotate(model, -PI / 2, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		precursors.Draw(ourShader);
 
-		// draw skybox as last
-		glDepthFunc(GL_LEQUAL);  // change depth function so depth test passes when values are equal to depth buffer's content
+		// Draw SkyBox
+		// Change depth function so depth test passes when values are equal to depth buffer's content
+		glDepthFunc(GL_LEQUAL);
 		skyboxShader.use();
-		view = glm::mat4(glm::mat3(camera.GetViewMatrix())); // remove translation from the view matrix
+
+		// Remove translation from the view matrix
+		view = glm::mat4(glm::mat3(camera.GetViewMatrix()));
 		skyboxShader.setMat4("view", view);
 		skyboxShader.setMat4("projection", projection);
-		// skybox cube
+
+		// SkyBox cube
 		glBindVertexArray(skyboxVAO);
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_CUBE_MAP, cubemapTexture);
 		glDrawArrays(GL_TRIANGLES, 0, 36);
 		glBindVertexArray(0);
-		glDepthFunc(GL_LESS); // set depth function back to default
+
+		// Set depth function back to default
+		glDepthFunc(GL_LESS);
 
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
-		// -------------------------------------------------------------------------------
-
-
-
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
 
-	// optional: de-allocate all resources once they've outlived their purpose:
-	// ------------------------------------------------------------------------
+	// De-allocate all resources once they've outlived their purpose:
 	glDeleteVertexArrays(1, &skyboxVAO);
 	glDeleteBuffers(1, &skyboxVBO);
 
@@ -292,10 +307,13 @@ void processInput(GLFWwindow* window) {
 }
 
 
-// glfw: whenever the window size changed (by OS or user resize) this callback function executes
-// ---------------------------------------------------------------------------------------------
+/**
+* Window callback
+*
+* glfw: whenever the window size changed (by OS or user resize) this callback function executes
+*/
 void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
-	// make sure the viewport matches the new window dimensions; note that width and 
+	// Make sure the viewport matches the new window dimensions; note that width and 
 	// height will be significantly larger than specified on retina displays.
 	glViewport(0, 0, width, height);
 }
@@ -316,7 +334,9 @@ void mouse_callback(GLFWwindow* window, double xposIn, double yposIn) {
 	}
 
 	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+
+	// Reversed since y-coordinates go from bottom to top
+	float yoffset = lastY - ypos;
 
 	lastX = xpos;
 	lastY = ypos;
