@@ -1,0 +1,11 @@
+Model Information:
+* title:	Halo - UNSC Panama | Mulsanne-class
+* source:	https://sketchfab.com/3d-models/halo-unsc-panama-mulsanne-class-8102cecc825e4fafbc1d217c9c4c2bb7
+* author:	NepsterCZ (https://sketchfab.com/NepsterCZ)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Halo - UNSC Panama | Mulsanne-class" (https://sketchfab.com/3d-models/halo-unsc-panama-mulsanne-class-8102cecc825e4fafbc1d217c9c4c2bb7) by NepsterCZ (https://sketchfab.com/NepsterCZ) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

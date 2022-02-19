@@ -50,6 +50,16 @@ bool firstMouse = true;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+float* caminar(float x, float z);
+glm::mat4 curvaModelado(float x, float z, glm::mat4 model, float angleShip, glm::vec3 ejes);
+float xNavFrente = 900.0f;
+float zNavFrente = 93.420f;
+float xNavAtras = 980.0f;
+float zNavAtras = 93.420f;
+float xNavCrucero = 940.0f;
+float zNavCrucero = 93.420f;
+float angleShip = 0.0f;
+
 glm::vec3 shipMovement(float a, float b, float j, float k, glm::vec3 init, float t, float fase) {
 	return init + glm::vec3(cos(a * t) - pow(cos(b * t), j), sin(a * t) - pow(sin(b * t), k), sin(t) - fase);
 }
@@ -102,6 +112,10 @@ int main() {
 	Model pelican("model/pelican/scene.gltf");
 	Model phantom("model/phantom/scene.gltf");
 	Model precursors("model/precursors/scene.gltf");
+	Model earth("model/earth/scene.gltf");
+	Model mulsanne_ship("model/mulsanne_ship/scene.gltf");
+	Model space_fighters("model/space_fighters/scene.gltf");
+	Model station("model/space_station/scene.gltf");
 
 	// Preloaded instace positions for ships
 	float xmove[50], ymove[50], zmove[50], abjk[200];
@@ -148,6 +162,7 @@ int main() {
 
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
+	camera.MovementSpeed = 30; //Optional. Modify the speed of the camera
 
 	// Render Loop
 	while (!glfwWindowShouldClose(window)) {
@@ -167,35 +182,44 @@ int main() {
 		ourShader.use();
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 1500.0f);
 		shader.setMat4("model", model);
 		shader.setMat4("view", view);
 		shader.setMat4("projection", projection);
 
 		// Mars
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-12.0f, 9.5f, -9.0f));
-		model = glm::scale(model, glm::vec3(11.0f, 11.0f, 11.0f));
-		model = glm::rotate(model, currentFrame / 100, glm::vec3(0.0f, 1.0f, 0.0f));
+		model = glm::translate(model, glm::vec3(-30.0f, 0.0f, 0.0f)); //-12.0f, 9.5f, -9.0f
+		model = glm::scale(model, glm::vec3(20.0f, 20.0f, 20.0f));
+		model = glm::rotate(model, currentFrame / 80, glm::vec3(0.0f, 1.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		mars.Draw(ourShader);
 
 		// Ring
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(0.2f, 9.5f, -7.0f));
+		model = glm::translate(model, glm::vec3(-5.0f, 0.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
 		model = glm::rotate(model, -0.2f, glm::vec3(0.0f, 1.0f, 0.0f));
 		model = glm::rotate(model, 0.08f, glm::vec3(0.0f, 0.0f, 1.0f));
-		model = glm::rotate(model, currentFrame / 100, glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, currentFrame / 60, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		ring.Draw(ourShader);
 
+		//Earth
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(900.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(1.8f, 1.8f, 1.8f));
+		model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		model = glm::rotate(model, currentFrame / 60, glm::vec3(0.0f, 0.0f, 1.0f));
+		ourShader.setMat4("model", model);
+		earth.Draw(ourShader);
+
 		// Charon
 		model = glm::mat4(1.0f);
-		glm::vec3 init = glm::vec3(15.0f, 9.5f, -7.5f);
+		glm::vec3 init = glm::vec3(10.0f, 0.0f, 0.0f);
 		float t = currentFrame / 10.0f;
 		model = glm::translate(model, shipMovement(1, 2, 2, 1, init, currentFrame / 50.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(-0.5f, 0.5f, 0.5f));
+		model = glm::scale(model, glm::vec3(-0.9f, 0.9f, 0.9f));
 		model = glm::rotate(model, -PI / 2, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		charon.Draw(ourShader);
@@ -203,7 +227,7 @@ int main() {
 		for (int i = 0; i < 50; i++) {
 			// Pelican
 			model = glm::mat4(1.0f);
-			init = glm::vec3(15.0f - xmove[i], 9.5f - ymove[i], -6.5f - zmove[i]);
+			init = glm::vec3(10.0f - xmove[i], 0.1f - ymove[i], 0.5f - zmove[i]);
 			model = glm::translate(
 				model,
 				shipMovement(
@@ -223,7 +247,7 @@ int main() {
 
 			// Phantom
 			model = glm::mat4(1.0f);
-			init = glm::vec3(2.0f + xmove[i], 9.5f - ymove[i], -5.5f - zmove[i]);
+			init = glm::vec3(-7.0f + xmove[i], 0.0f - ymove[i], 3.0f - zmove[i]);
 			model = glm::translate(
 				model,
 				shipMovement(
@@ -244,13 +268,68 @@ int main() {
 
 		// Precursors
 		model = glm::mat4(1.0f);
-		init = glm::vec3(2.0f, 9.5f, -10.0f);
+		init = glm::vec3(-4.0f, 0.0f, -2.0f);
 		t = currentFrame / 10.0f;
 		model = glm::translate(model, shipMovement(2, 1, 2, 1, init, currentFrame / 50.0f, -PI / 2));
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
+		model = glm::scale(model, glm::vec3(0.5f, 0.5f, 0.5f));
 		model = glm::rotate(model, -PI / 2, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
 		precursors.Draw(ourShader);
+
+		//Space Station
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(900.0f, 70.0f, 150.0f));
+		model = glm::scale(model, glm::vec3(0.03f, 0.03f, 0.03f));
+		model = glm::rotate(model, glm::radians(90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+		ourShader.setMat4("model", model);
+		station.Draw(ourShader);
+
+		angleShip = glfwGetTime() * 10.0f;
+
+		//Mulsanne Ship - Naves de Pasajeros
+		for (int i = 0; i < 2; i++) {
+			model = glm::mat4(1.0f);
+			if (i == 0) {
+				model = glm::translate(model, glm::vec3(xNavCrucero, 0.0f, zNavCrucero - 10.0f)); //900 180
+			}
+			else {
+				model = glm::translate(model, glm::vec3(xNavCrucero, 0.0f, zNavCrucero + 10.0f));
+			}
+			model = glm::scale(model, glm::vec3(0.0003f, 0.0003f, 0.0003f));
+			model = glm::rotate(model, glm::radians(100.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+			model = curvaModelado(xNavCrucero, zNavCrucero, model, angleShip, glm::vec3(0.0f, 1.0f, 0.0f)); //Naves Crucero
+			ourShader.setMat4("model", model);
+			mulsanne_ship.Draw(ourShader);
+		}
+
+		float* salidaNavCrucero = caminar(xNavCrucero, zNavCrucero); //Naves de enfrente
+		xNavCrucero = salidaNavCrucero[0];
+		zNavCrucero = salidaNavCrucero[1];
+
+		//Space fighters
+		for (int i = 0; i < 2; i++) {
+			model = glm::mat4(1.0f);
+			if (i == 0) { //Al frente
+				model = glm::translate(model, glm::vec3(xNavFrente, 0.0f, zNavFrente));
+			}
+			else {//Atras
+				model = glm::translate(model, glm::vec3(xNavAtras, 0.0f, zNavAtras));
+			}
+			model = glm::scale(model, glm::vec3(0.3f, 0.3f, 0.3f));
+			model = glm::rotate(model, glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f));
+			model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			model = curvaModelado(xNavFrente, zNavFrente, model, angleShip, glm::vec3(0.0f, 0.0f, 1.0f)); //Naves de enfrente y atras
+			ourShader.setMat4("model", model);
+			space_fighters.Draw(ourShader);
+		}
+
+		float* salidaNavFrente = caminar(xNavFrente, zNavFrente); //Naves de enfrente
+		xNavFrente = salidaNavFrente[0];
+		zNavFrente = salidaNavFrente[1];
+
+		float* salidaNavAtras = caminar(xNavAtras, zNavAtras); // Naves de atras
+		xNavAtras = salidaNavAtras[0];
+		zNavAtras = salidaNavAtras[1];
 
 		// Draw SkyBox
 		// Change depth function so depth test passes when values are equal to depth buffer's content
@@ -303,7 +382,7 @@ void processInput(GLFWwindow* window) {
 		camera.ProcessKeyboard(RIGHT, cameraSpeed * deltaTime);
 
 	// Use LEFT CTRL to move fast
-	cameraSpeed = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ? 4 : 1;
+	cameraSpeed = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ? 3 : 1;
 }
 
 
@@ -464,4 +543,91 @@ unsigned int loadCubemap(const char* faces[]) {
 
 	std::cout << "Cubemap textures loaded." << std::endl;
 	return textureID;
+}
+
+float* caminar(float x, float z) {
+	float radioAux = 93.420f;
+	float h;
+	float xAux;
+	float array[2];
+
+	if (z >= 0.0f) {//Arriba - Imagen positiva
+
+		if (x < -30.0f || x > 900.0f) {
+			if (x <= -30.0f) {
+				h = -30.0f;
+			}
+			else {
+				h = 900.0f;
+			}
+			x -= 0.5f;
+			xAux = x - 0.2f;
+			z = sqrt(pow(radioAux, 2) - pow(xAux - h, 2));
+		}
+		else {
+			x -= 0.5f;
+			xAux = x + 0.5f;
+			z = 219.140f * sqrt(1.0f - pow((xAux - 435.0f) / 514.050f, 2)) + 0.0f;
+		}
+
+	}
+	else {//Abajo - Imagen negativa
+
+		if (x < -30.0f || x > 900.0f) {
+			//model = glm::rotate(model, glm::radians(90.0f), glm::vec3(0.0f, 0.0f, 1.0f));
+			if (x <= -30.0f) {
+				h = -30.0f;
+			}
+			else {
+				h = 900.0f;
+			}
+			x += 0.5f;
+			xAux = x - 0.2f;
+			z = -sqrt(pow(radioAux, 2) - pow(xAux - h, 2));
+		}
+		else {
+			x += 0.5f;
+			xAux = x + 0.5f;
+			z = -219.140f * sqrt(1.0f - pow((xAux - 435.0f) / 514.050f, 2)) + 0.0f;
+		}
+		if (x == 993.5f) {
+			z = 0.0f;
+		}
+	}
+	array[0] = x;
+	array[1] = z;
+	return array;
+
+}
+
+glm::mat4 curvaModelado(float x, float z, glm::mat4 model, float angleShip, glm::vec3 ejes) {
+	if (z >= 0.0f) {
+		if ((x < -30.0f || x > 900.0f)) {
+			if (x < -30.0f) {
+				model = glm::rotate(model, glm::radians(-angleShip), ejes);
+			}
+			else {
+				model = glm::rotate(model, glm::radians(angleShip), ejes);
+			}
+		}
+		else {
+			model = glm::rotate(model, glm::radians(0.0f), ejes);
+		}
+	}
+	else {
+		if ((x < -30.0f || x > 900.0f)) {
+			if (x < -30.0f) {
+				model = glm::rotate(model, glm::radians(-angleShip), ejes);
+			}
+			else {
+				model = glm::rotate(model, glm::radians(angleShip), ejes);
+			}
+		}
+		else {
+			model = glm::rotate(model, glm::radians(180.0f), ejes);
+		}
+	}
+	return model;
+
+
 }
