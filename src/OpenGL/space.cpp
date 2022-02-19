@@ -17,19 +17,23 @@
 #include <learnopengl/model.h>
 
 #include <math.h>
+#include <iostream>
+#include <fstream>
+
 
 //#define STB_IMAGE_IMPLEMENTATION 
 //#include <learnopengl/stb_image.h>
 
-#include <iostream>
 const float PI = 3.14159265359f;
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow* window);
+
 unsigned int loadTexture(const char* path);
 unsigned int loadCubemap(const char* faces[]);
+void loadNumbers(char const* path, float data[]);
 
 // Settings
 const unsigned int SCR_WIDTH = 800;
@@ -45,6 +49,10 @@ bool firstMouse = true;
 // timing
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
+
+glm::vec3 shipMovement(float a, float b, float j, float k, glm::vec3 init, float t, float fase) {
+	return init + glm::vec3(cos(a * t) - pow(cos(b * t), j), sin(a * t) - pow(sin(b * t), k), sin(t) - fase);
+}
 
 int main() {
 	// glfw: initialize and configure
@@ -102,50 +110,8 @@ int main() {
 
 
 	// SkyBox Vertices
-	float skyboxVertices[] = {
-		-1.0f,  1.0f, -1.0f,
-		-1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,
-		 1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-
-		-1.0f, -1.0f,  1.0f,
-		-1.0f, -1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f, -1.0f,
-		-1.0f,  1.0f,  1.0f,
-		-1.0f, -1.0f,  1.0f,
-
-		 1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,
-
-		-1.0f, -1.0f,  1.0f,
-		-1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f, -1.0f,  1.0f,
-		-1.0f, -1.0f,  1.0f,
-
-		-1.0f,  1.0f, -1.0f,
-		 1.0f,  1.0f, -1.0f,
-		 1.0f,  1.0f,  1.0f,
-		 1.0f,  1.0f,  1.0f,
-		-1.0f,  1.0f,  1.0f,
-		-1.0f,  1.0f, -1.0f,
-
-		-1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f,  1.0f,
-		 1.0f, -1.0f, -1.0f,
-		 1.0f, -1.0f, -1.0f,
-		-1.0f, -1.0f,  1.0f,
-		 1.0f, -1.0f,  1.0f
-	};
-
+	float skyboxVertices[108];
+	loadNumbers("data/skybox.txt", skyboxVertices);
 
 	// SkyBox VAO
 	unsigned int skyboxVAO, skyboxVBO;
@@ -162,7 +128,7 @@ int main() {
 	//unsigned int cubeTexture = loadTexture("textures/container.jpg");
 	//std::cout << "Textures loaded" << std::endl;
 
-	// SkyeBox cube faces
+	// SkyBox cube faces
 	const char* faces[6]{
 		"textures/skybox/right.jpg",
 		"textures/skybox/left.jpg",
@@ -174,7 +140,6 @@ int main() {
 
 	// Load cubemap textures
 	unsigned int cubemapTexture = loadCubemap(faces);
-	std::cout << "Cubemap textures loaded" << std::endl;
 
 	// Shader configuration
 	shader.use();
@@ -233,8 +198,8 @@ int main() {
 		// Charon
 		model = glm::mat4(1.0f);
 		glm::vec3 init = glm::vec3(15.0f, 9.5f, -10.0f);
-		float factor = currentFrame / 10.0f;
-		model = glm::translate(model, init + glm::vec3(cos(factor) - pow(cos(factor), 3.0f), sin(factor) - pow(sin(factor), 3.0f), sin(factor)));
+		float t = currentFrame / 10.0f;
+		model = glm::translate(model, shipMovement(1, 2, 3, 3, init, currentFrame / 10.0f, 0.0f));
 		model = glm::scale(model, glm::vec3(-0.5f, 0.5f, 0.5f));
 		model = glm::rotate(model, -PI / 2, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
@@ -243,13 +208,10 @@ int main() {
 
 
 		// Pelican
-		int a = 1, b = 2;
-
 		for (int i = 0; i < 50; i++) {
 			model = glm::mat4(1.0f);
-			init = glm::vec3(15.0f, i*7.0f, -10.0f);
-			factor = currentFrame / 10.0f;
-			model = glm::translate(model, init + glm::vec3(cos(a * factor) - pow(cos(b * factor), 3.0f), sin(a * factor) - pow(sin(b * factor), 3.0f), sin(factor) - PI / 2));
+			init = glm::vec3(15.0f, i * 7.0f, -10.0f);
+			model = glm::translate(model, shipMovement(1, 2, 3, 3, init, currentFrame / 10.0f, -PI / 2));
 			model = glm::scale(model, glm::vec3(0.0001f, 0.0001f, 0.0001f));
 			model = glm::rotate(model, -PI / 2, glm::vec3(0.0f, 1.0f, 0.0f));
 			ourShader.setMat4("model", model);
@@ -257,18 +219,20 @@ int main() {
 		}
 
 		// Phantom
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(7.0f, 9.5f, -7.0f));
-		model = glm::scale(model, glm::vec3(0.0005f, 0.0005f, 0.0005f));
-		ourShader.setMat4("model", model);
-		phantom.Draw(ourShader);
-
+		for (int i = 0; i < 50; i++) {
+			model = glm::mat4(1.0f);
+			init = glm::vec3(7.0f, 9.5f, -7.0f);
+			model = glm::translate(model, shipMovement(1, 2, 3, 3, init, currentFrame / 10.0f, 0.0f));
+			model = glm::scale(model, glm::vec3(0.0005f, 0.0005f, 0.0005f));
+			ourShader.setMat4("model", model);
+			phantom.Draw(ourShader);
+		}
 
 		// Precursors
 		model = glm::mat4(1.0f);
 		init = glm::vec3(2.0f, 9.5f, -10.0f);
-		factor = currentFrame / 10.0f;
-		model = glm::translate(model, init + glm::vec3(cos(a * factor) - pow(cos(b * factor), 3.0f), sin(a * factor) - pow(sin(b * factor), 3.0f), sin(factor) - PI / 2));
+		t = currentFrame / 10.0f;
+		model = glm::translate(model, shipMovement(1, 2, 3, 3, init, currentFrame / 10.0f, -PI / 2));
 		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));
 		model = glm::rotate(model, -PI / 2, glm::vec3(1.0f, 0.0f, 0.0f));
 		ourShader.setMat4("model", model);
@@ -372,6 +336,28 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset) {
 
 
 /**
+* Loads float numbers from a file
+*
+* Loads float numbers from a TXT file and
+* stores it on a new array.
+*
+* @param path Numbers file path (string)
+* @param data[] The array for storing the numbers.
+*/
+void loadNumbers(char const* path, float data[]) {
+	std::fstream skyboxData(path, std::ios_base::in);
+	float number;
+	int i = 0;
+	while (skyboxData >> number) {
+		data[i] = number;
+		i++;
+	}
+	skyboxData.close();
+	cout << i << " floats have been loaded." << std::endl;
+}
+
+
+/**
 * Loads a texture
 *
 * Loads a texture from its path.
@@ -409,7 +395,7 @@ unsigned int loadTexture(char const* path) {
 		std::cout << "Texture failed to load at path: " << path << std::endl;
 		stbi_image_free(data);
 	}
-
+	std::cout << "Texture loaded." << std::endl;
 	return textureID;
 }
 
@@ -456,5 +442,6 @@ unsigned int loadCubemap(const char* faces[]) {
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
 	glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
 
+	std::cout << "Cubemap textures loaded." << std::endl;
 	return textureID;
 }

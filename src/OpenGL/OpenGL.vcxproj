@@ -165,6 +165,9 @@
     <Image Include="textures\skybox\right.jpg" />
     <Image Include="textures\skybox\top.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\skybox.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

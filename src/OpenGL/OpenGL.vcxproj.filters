@@ -22,6 +22,9 @@
     <Filter Include="Source Files\textures\skybox">
       <UniqueIdentifier>{9d3ea22e-3e59-49da-8399-eebe5a761be4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\data">
+      <UniqueIdentifier>{30604bd3-3bc1-4cfe-93ea-ffcb450f6708}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="glad.c">
@@ -73,5 +76,10 @@
     <Image Include="textures\container.jpg">
       <Filter>Source Files\textures</Filter>
     </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="data\skybox.txt">
+      <Filter>Source Files\data</Filter>
+    </Text>
   </ItemGroup>
 </Project>
