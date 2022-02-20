@@ -9,10 +9,6 @@
       <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
       <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
     </Filter>
-    <Filter Include="Resource Files">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
     <Filter Include="Source Files\shaders">
       <UniqueIdentifier>{f2d346a2-11b2-43d8-9067-ce5bb9474d6c}</UniqueIdentifier>
     </Filter>
@@ -24,6 +20,10 @@
     </Filter>
     <Filter Include="Source Files\data">
       <UniqueIdentifier>{30604bd3-3bc1-4cfe-93ea-ffcb450f6708}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -47,10 +47,16 @@
     <None Include="shaders\skybox.vs">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="shaders\shader_exercise16_mloading.fs">
+    <None Include="shaders\model.fs">
       <Filter>Source Files\shaders</Filter>
     </None>
-    <None Include="shaders\shader_exercise16_mloading.vs">
+    <None Include="shaders\model.vs">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\shader_all.fs">
+      <Filter>Source Files\shaders</Filter>
+    </None>
+    <None Include="shaders\shader_all.vs">
       <Filter>Source Files\shaders</Filter>
     </None>
   </ItemGroup>
@@ -73,9 +79,6 @@
     <Image Include="textures\skybox\top.jpg">
       <Filter>Source Files\textures\skybox</Filter>
     </Image>
-    <Image Include="textures\container.jpg">
-      <Filter>Source Files\textures</Filter>
-    </Image>
   </ItemGroup>
   <ItemGroup>
     <Text Include="data\skybox.txt">
@@ -93,5 +96,16 @@
     <Text Include="data\abjk.txt">
       <Filter>Source Files\data</Filter>
     </Text>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\OpenGL_Stuff\include\learnopengl\mesh.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\OpenGL_Stuff\include\learnopengl\model.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\OpenGL_Stuff\include\learnopengl\shader.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

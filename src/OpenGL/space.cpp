@@ -54,6 +54,12 @@ glm::vec3 shipMovement(float a, float b, float j, float k, glm::vec3 init, float
 	return init + glm::vec3(cos(a * t) - pow(cos(b * t), j), sin(a * t) - pow(sin(b * t), k), sin(t) - fase);
 }
 
+void resetShader(Shader shader) {
+	shader.setInt("texture_specular1", 0);
+	shader.setInt("texture_normals1", 0);
+	shader.setInt("texture_emission1", 0);
+}
+
 int main() {
 	// glfw: initialize and configure
 	glfwInit();
@@ -93,15 +99,16 @@ int main() {
 	// Build and compile shaders
 	Shader shader("shaders/cubemaps.vs", "shaders/cubemaps.fs");
 	Shader skyboxShader("shaders/skybox.vs", "shaders/skybox.fs");
-	Shader ourShader("shaders/shader_exercise16_mloading.vs", "shaders/shader_exercise16_mloading.fs");
+
+	Shader ourShader("shaders/shader_all.vs", "shaders/shader_all.fs");
 
 	// Load 3D Models
-	Model mars("model/mars/scene.gltf");
-	Model ring("model/haloring/scene.gltf");
-	Model charon("model/charon/scene.gltf");
-	Model pelican("model/pelican/scene.gltf");
-	Model phantom("model/phantom/scene.gltf");
-	Model precursors("model/precursors/scene.gltf");
+	Model mars("model/mars/scene.gltf", false, true);
+	Model ring("model/haloring/scene.gltf", false, true);
+	Model charon("model/charon/scene.gltf", false, true);
+	Model pelican("model/pelican/scene.gltf", false, true);
+	Model phantom("model/phantom/scene.gltf", false, true);
+	Model precursors("model/precursors/scene.gltf", false, true);
 
 	// Preloaded instace positions for ships
 	float xmove[50], ymove[50], zmove[50], abjk[200];
@@ -165,14 +172,21 @@ int main() {
 
 		// Camera Scene
 		ourShader.use();
+		ourShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
+		ourShader.setVec3("light.diffuse", 0.7f, 0.7f, 0.7f);
+		ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
+		ourShader.setFloat("material.shininess", 10.0f);
+
+
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-		shader.setMat4("model", model);
-		shader.setMat4("view", view);
-		shader.setMat4("projection", projection);
+		ourShader.setMat4("model", model);
+		ourShader.setMat4("view", view);
+		ourShader.setMat4("projection", projection);
 
-		// Mars
+		//// Mars
+		resetShader(ourShader);
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(-12.0f, 9.5f, -9.0f));
 		model = glm::scale(model, glm::vec3(11.0f, 11.0f, 11.0f));
@@ -180,7 +194,8 @@ int main() {
 		ourShader.setMat4("model", model);
 		mars.Draw(ourShader);
 
-		// Ring
+		//// Ring
+		resetShader(ourShader);
 		model = glm::mat4(1.0f);
 		model = glm::translate(model, glm::vec3(0.2f, 9.5f, -7.0f));
 		model = glm::scale(model, glm::vec3(1.0f, 1.0f, 1.0f));
@@ -191,6 +206,7 @@ int main() {
 		ring.Draw(ourShader);
 
 		// Charon
+		resetShader(ourShader);
 		model = glm::mat4(1.0f);
 		glm::vec3 init = glm::vec3(15.0f, 9.5f, -7.5f);
 		float t = currentFrame / 10.0f;
@@ -201,7 +217,8 @@ int main() {
 		charon.Draw(ourShader);
 
 		for (int i = 0; i < 50; i++) {
-			// Pelican
+			// Pelican	
+			resetShader(ourShader);
 			model = glm::mat4(1.0f);
 			init = glm::vec3(15.0f - xmove[i], 9.5f - ymove[i], -6.5f - zmove[i]);
 			model = glm::translate(
@@ -243,6 +260,7 @@ int main() {
 		}
 
 		// Precursors
+		resetShader(ourShader);
 		model = glm::mat4(1.0f);
 		init = glm::vec3(2.0f, 9.5f, -10.0f);
 		t = currentFrame / 10.0f;

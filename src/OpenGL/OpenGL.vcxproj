@@ -151,13 +151,14 @@
   <ItemGroup>
     <None Include="shaders\cubemaps.fs" />
     <None Include="shaders\cubemaps.vs" />
-    <None Include="shaders\shader_exercise16_mloading.fs" />
-    <None Include="shaders\shader_exercise16_mloading.vs" />
+    <None Include="shaders\model.fs" />
+    <None Include="shaders\model.vs" />
+    <None Include="shaders\shader_all.fs" />
+    <None Include="shaders\shader_all.vs" />
     <None Include="shaders\skybox.fs" />
     <None Include="shaders\skybox.vs" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="textures\container.jpg" />
     <Image Include="textures\skybox\back.jpg" />
     <Image Include="textures\skybox\bottom.jpg" />
     <Image Include="textures\skybox\front.jpg" />
@@ -171,6 +172,11 @@
     <Text Include="data\xmove.txt" />
     <Text Include="data\ymove.txt" />
     <Text Include="data\zmove.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\OpenGL_Stuff\include\learnopengl\mesh.h" />
+    <ClInclude Include="..\OpenGL_Stuff\include\learnopengl\model.h" />
+    <ClInclude Include="..\OpenGL_Stuff\include\learnopengl\shader.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
