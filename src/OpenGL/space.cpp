@@ -102,7 +102,7 @@ int main() {
 	glEnable(GL_DEPTH_TEST);
 
 	// Build and compile shaders
-	Shader shader("shaders/cubemaps.vs", "shaders/cubemaps.fs");
+	
 	Shader skyboxShader("shaders/skybox.vs", "shaders/skybox.fs");
 
 	Shader ourShader("shaders/shader_all.vs", "shaders/shader_all.fs");
@@ -159,8 +159,6 @@ int main() {
 	unsigned int cubemapTexture = loadCubemap(faces);
 
 	// Shader configuration
-	shader.use();
-	shader.setInt("texture1", 0);
 
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
