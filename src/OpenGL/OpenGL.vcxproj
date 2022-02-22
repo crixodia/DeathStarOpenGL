@@ -145,8 +145,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ExamenBimestral2.cpp" />
     <ClCompile Include="glad.c" />
-    <ClCompile Include="space.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="shaders\cubemaps.fs" />
