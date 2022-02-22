@@ -202,8 +202,8 @@ int main() {
 		ourShader.setVec3("pointLights[0].diffuse", 1.0f, 1.0f, 1.0f);
 		ourShader.setVec3("pointLights[0].specular", 0.5f, 0.5f, 0.5f);
 		ourShader.setFloat("pointLights[0].constant", 1.0f);
-		ourShader.setFloat("pointLights[0].linear", 0.0004);
-		ourShader.setFloat("pointLights[0].quadratic", 0.00007);
+		ourShader.setFloat("pointLights[0].linear", 0.0014);
+		ourShader.setFloat("pointLights[0].quadratic", 0.000007);
 		
 		// spotLight
 		ourShader.setVec3("spotLight.position", camera.Position);
