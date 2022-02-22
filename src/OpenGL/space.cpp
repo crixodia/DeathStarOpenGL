@@ -195,15 +195,15 @@ int main() {
 		ourShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
 		ourShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
 		ourShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
-
+		//900.0f, 70.0f, 130.0f
 		//pointlight
-		ourShader.setVec3("pointLights[0].position", 900.0f,0.0f,0.0f);
+		ourShader.setVec3("pointLights[0].position", 900.0f, 0.0f, 0.0f);
 		ourShader.setVec3("pointLights[0].ambient", 1.0f, 1.0f, 1.0f);
-		ourShader.setVec3("pointLights[0].diffuse", 1 * 0.8f, 1 * 0.8f, 1 * 0.8f);
+		ourShader.setVec3("pointLights[0].diffuse", 1.0f, 1.0f, 1.0f);
 		ourShader.setVec3("pointLights[0].specular", 0.5f, 0.5f, 0.5f);
 		ourShader.setFloat("pointLights[0].constant", 1.0f);
-		ourShader.setFloat("pointLights[0].linear", 0.0014);
-		ourShader.setFloat("pointLights[0].quadratic", 0.0007);
+		ourShader.setFloat("pointLights[0].linear", 0.0004);
+		ourShader.setFloat("pointLights[0].quadratic", 0.00007);
 		
 		// spotLight
 		ourShader.setVec3("spotLight.position", camera.Position);
