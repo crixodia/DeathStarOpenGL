@@ -25,7 +25,7 @@
 // #include <learnopengl/stb_image.h>
 
 const float PI = 3.14159265359f;
-
+int scene_change = 0;
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
@@ -41,8 +41,8 @@ float* caminar(float x, float z);
 glm::mat4 curvaModelado(float x, float z, glm::mat4 model, float angleShip, glm::vec3 ejes);
 
 // Settings
-const unsigned int SCR_WIDTH = 800;
-const unsigned int SCR_HEIGHT = 800;
+const unsigned int SCR_WIDTH = 800; //1600 900
+const unsigned int SCR_HEIGHT =800;
 
 // Camera
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
@@ -77,7 +77,7 @@ int main() {
 #endif
 
 	// glfw window creation
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Space", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "Grupo2-Halo", NULL, NULL);
 	if (window == NULL) {
 		std::cout << "Failed to create GLFW window" << std::endl;
 		glfwTerminate();
@@ -105,7 +105,7 @@ int main() {
 	
 	Shader skyboxShader("shaders/skybox.vs", "shaders/skybox.fs");
 
-	Shader ourShader("shaders/shader_all.vs", "shaders/shader_all.fs");
+	Shader ourShader("shaders/shader_mloading.vs", "shaders/shader_mloading.fs");
 
 	// Load 3D Models
 	Model mars("model/mars/scene.gltf", false, true);
@@ -163,6 +163,8 @@ int main() {
 	skyboxShader.use();
 	skyboxShader.setInt("skybox", 0);
 
+	
+
 	// Render Loop
 	while (!glfwWindowShouldClose(window)) {
 		// Frame
@@ -179,11 +181,44 @@ int main() {
 
 		// Camera Scene
 		ourShader.use();
+
 		ourShader.setVec3("light.ambient", 0.5f, 0.5f, 0.5f);
 		ourShader.setVec3("light.diffuse", 0.7f, 0.7f, 0.7f);
 		ourShader.setVec3("light.specular", 1.0f, 1.0f, 1.0f);
-		ourShader.setFloat("material.shininess", 10.0f);
+		
+		ourShader.setVec3("viewPos", camera.Position);
+		ourShader.setFloat("material.shininess", 32.0f);
 
+		// directional light
+		ourShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		ourShader.setVec3("dirLight.direction", -0.2f, -1.0f, -0.3f);
+		ourShader.setVec3("dirLight.ambient", 0.05f, 0.05f, 0.05f);
+		ourShader.setVec3("dirLight.diffuse", 0.4f, 0.4f, 0.4f);
+		ourShader.setVec3("dirLight.specular", 0.5f, 0.5f, 0.5f);
+
+		//pointlight
+		ourShader.setVec3("pointLights[0].position", 900.0f,0.0f,0.0f);
+		ourShader.setVec3("pointLights[0].ambient", 1.0f, 1.0f, 1.0f);
+		ourShader.setVec3("pointLights[0].diffuse", 1 * 0.8f, 1 * 0.8f, 1 * 0.8f);
+		ourShader.setVec3("pointLights[0].specular", 0.5f, 0.5f, 0.5f);
+		ourShader.setFloat("pointLights[0].constant", 1.0f);
+		ourShader.setFloat("pointLights[0].linear", 0.0014);
+		ourShader.setFloat("pointLights[0].quadratic", 0.0007);
+		
+		// spotLight
+		ourShader.setVec3("spotLight.position", camera.Position);
+		ourShader.setVec3("spotLight.direction", camera.Front);
+		ourShader.setVec3("spotLight.ambient", 0.0f, 0.0f, 0.0f);
+		ourShader.setVec3("spotLight.diffuse", 1.0f, 1.0f, 1.0f);
+		ourShader.setVec3("spotLight.specular", 1.0f, 1.0f, 1.0f);
+		ourShader.setFloat("spotLight.constant", 1.0f);
+		ourShader.setFloat("spotLight.linear", 0.09);
+		ourShader.setFloat("spotLight.quadratic", 0.032);
+		ourShader.setFloat("spotLight.cutOff", glm::cos(glm::radians(12.5f)));
+		ourShader.setFloat("spotLight.outerCutOff", glm::cos(glm::radians(17.5f)));
+
+		//cambio de escena
+		ourShader.setInt("scene_change", scene_change);
 
 		glm::mat4 model = glm::mat4(1.0f);
 		glm::mat4 view = camera.GetViewMatrix();
@@ -395,6 +430,12 @@ void processInput(GLFWwindow* window) {
 		camera.ProcessKeyboard(LEFT, cameraSpeed * deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, cameraSpeed * deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_F1) == GLFW_PRESS)
+		scene_change = 1;
+	if (glfwGetKey(window, GLFW_KEY_F2) == GLFW_PRESS)
+		scene_change = 2;
+	if (glfwGetKey(window, GLFW_KEY_F3) == GLFW_PRESS)
+		scene_change = 0;
 
 	// Use LEFT CTRL to move fast
 	cameraSpeed = glfwGetKey(window, GLFW_KEY_LEFT_CONTROL) == GLFW_PRESS ? 30 : 10;
