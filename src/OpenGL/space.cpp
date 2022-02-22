@@ -250,7 +250,7 @@ int main() {
 					-PI / 2
 				)
 			);
-			model = glm::scale(model, glm::vec3(0.0001f, 0.0001f, 0.0001f));
+			model = glm::scale(model, glm::vec3(0.0002f, 0.0002f, 0.0002f));
 			model = glm::rotate(model, -PI / 2, glm::vec3(0.0f, 1.0f, 0.0f));
 			ourShader.setMat4("model", model);
 			pelican.Draw(ourShader);
@@ -271,7 +271,7 @@ int main() {
 					0.0f
 				)
 			);
-			model = glm::scale(model, glm::vec3(0.0005f, 0.0005f, 0.0005f));
+			model = glm::scale(model, glm::vec3(0.001f, 0.001f, 0.001f));
 			model = glm::rotate(model, PI / 2, glm::vec3(0.0f, 1.0f, 0.0f));
 			ourShader.setMat4("model", model);
 			phantom.Draw(ourShader);
