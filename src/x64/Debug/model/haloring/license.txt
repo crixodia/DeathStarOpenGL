@@ -1,0 +1,11 @@
+Model Information:
+* title:	Custom Halo Classic Ring
+* source:	https://sketchfab.com/3d-models/custom-halo-classic-ring-ac598555a727455ab07a7bf0ac076d50
+* author:	Aegis_Wolf (https://sketchfab.com/Aegis_Wolf)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Custom Halo Classic Ring" (https://sketchfab.com/3d-models/custom-halo-classic-ring-ac598555a727455ab07a7bf0ac076d50) by Aegis_Wolf (https://sketchfab.com/Aegis_Wolf) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
